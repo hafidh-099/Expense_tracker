@@ -1,29 +1,35 @@
 const { DataTypes } = require("sequelize");
 const db_connection = require("../utils/Database");
 
-
-db_connection;
 const transactionSchema = db_connection.define("Transaction", {
   user: {
-    // reference to user
+    // reference to user - should be a foreign key
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users', // assuming you have a User model
+      key: 'id'
+    }
   },
   type: {
     type: DataTypes.STRING,
     allowNull: false,
-    enum: ["income", "expense"],
+    validate: {  // Fixed: use validate.isIn instead of enum
+      isIn: [["income", "expense"]]
+    }
   },
   category: {
     type: DataTypes.STRING,
     allowNull: false,
-    default: "uncategorised",
+    defaultValue: "uncategorised",  // Fixed: defaultValue not default
   },
   amount: {
-    amount: DataTypes.INTEGER,
+    type: DataTypes.INTEGER,  // Fixed: was "amount: DataTypes.INTEGER"
     allowNull: false,
   },
   date: {
     type: DataTypes.DATE,
-    default: Date.now,
+    defaultValue: DataTypes.NOW,  // Fixed: defaultValue and use DataTypes.NOW
   },
   description: {
     type: DataTypes.STRING,

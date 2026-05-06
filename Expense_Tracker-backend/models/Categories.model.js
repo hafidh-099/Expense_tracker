@@ -1,19 +1,28 @@
 const db_connection = require("sequelize");
-const { Datatypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
+
 
 const categorySchema = db_connection.define("Category", {
   user: {
-    // relationship
+    // relationship - this should be defined as a foreign key
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users', // assuming you have a User model
+      key: 'id'
+    }
   },
   name: {
-    type: Datatype.String,
+    type: DataTypes.STRING,  // Fixed: DataTypes (plural), STRING (not String)
     allowNull: false,
-    default: "uncategorised",
+    defaultValue: "uncategorised"  // Fixed: defaultValue (not default)
   },
   type: {
-    type: Datatype.String,
+    type: DataTypes.STRING,  // Fixed: DataTypes.STRING
     allowNull: false,
-    enum: ["income", "expense"],
+    validate: {  // Sequelize uses 'validate' not 'enum'
+      isIn: [["income", "expense"]]
+    }
   },
 });
 
