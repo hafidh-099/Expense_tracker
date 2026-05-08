@@ -29,7 +29,7 @@ const UserSchema = db_connection.define("Users", {
     allowNull: false,
     validate: {
       len: {
-        args: [6, 100],  // Min 6 characters for security
+        args: [8, 100],  // Min 6 characters for security
         msg: "Password must be at least 6 characters"
       }
     }
