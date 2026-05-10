@@ -2,6 +2,7 @@ const express = require("express");
 const db_connection = require("./utils/Database");
 const userRoute = require("./routes/User.route");
 const errorHandle = require("./middleware/ErrorHandling");
+const categoryRoute = require("./routes/Category.route");
 
 const app = express();
 //db handler
@@ -16,6 +17,7 @@ app.use(express.json());
 
 //route
 app.use("/", userRoute);
+app.use("/", categoryRoute);
 //errorHandling
 app.use(errorHandle);
 

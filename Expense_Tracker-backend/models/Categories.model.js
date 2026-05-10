@@ -1,4 +1,4 @@
-const db_connection = require("sequelize");
+const db_connection = require("../utils/Database");
 const { DataTypes } = require("sequelize");
 
 
