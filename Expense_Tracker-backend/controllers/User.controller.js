@@ -75,34 +75,38 @@ const userController = {
   updatePassword: expressAsyncHandler(async (req, res) => {
     const { password } = req.body;
     if (!password) {
-    res.status(400);
-    throw new Error("Password is required");
-  }
+      res.status(400);
+      throw new Error("Password is required");
+    }
     const user = await UserSchema.findByPk(req.user);
     if (!user) {
       res.status(400);
       throw new Error("user not found");
     }
-    const newPassword = bcrypt.hashSync(password,10);
+    const newPassword = bcrypt.hashSync(password, 10);
     user.password = newPassword;
     await user.save();
     res.status(200).json({
       message: "Password is success updated",
     });
   }),
-
+  //update profile
   updateProfile: expressAsyncHandler(async (req, res) => {
-    const { password } = req.body;
-    const user = await UserSchema.findByPk(req.user);
-    if (!user) {
-      res.status(400);
-      throw new Error("user not found");
-    }
-    const newPassword = bcrypt.hashSync(password);
-    user.password = newPassword;
-    await user.save();
+    const { username, email } = req.body;
+    // if(!username || !email){
+    //   res.status(400)
+    //   throw new Error("value required")
+    // }
+    const updatedUser = await UserSchema.update(
+      { username: username, email: email },
+      { where: { id: req.user } }
+    );
+      if (!updatedUser) {
+    res.status(404);
+    throw new Error("User not found");
+  }
     res.status(200).json({
-      message: "Password is success updated",
+      message: "User profile updated successfully",updatedUser
     });
   }),
 };
