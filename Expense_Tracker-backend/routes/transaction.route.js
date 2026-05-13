@@ -10,9 +10,19 @@ transactionRoute.post(
   Transactions.create,
 );
 transactionRoute.get(
-  "/api/v1/transaction/filter",
+  "/api/v1/transaction/list",
   isAuthenticated,
   Transactions.list,
 );
+transactionRoute.put(
+  "/api/v1/transaction/update/:id",
+  isAuthenticated,
+  Transactions.update,
+);
 
+transactionRoute.delete(
+  "/api/v1/transaction/delete/:id",
+  isAuthenticated,
+  Transactions.delete,
+);
 module.exports = transactionRoute;

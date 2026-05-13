@@ -1,6 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const { where } = require("sequelize");
 const categorySchema = require("../models/Categories.model");
+const transactionSchema = require("../models/Transaction.model");
 
 const Categories = {
   create: expressAsyncHandler(async (req, res) => {
@@ -34,8 +35,30 @@ const Categories = {
     });
     res.status(200).json(category);
   }),
-  //update profile
-  delete: expressAsyncHandler(async (req, res) => {}),
+  //update
+  update: expressAsyncHandler(async (req, res) => {
+    const category = await transactionSchema.findByPk(req.params);
+    console.log(category)
+    const { name, type } = req.body;
+    if (category && category.user.toString() === req.user.toString) {
+      const updated = await categorySchema.update(
+        {
+          type,
+          name: name.toLowerCase(),
+        },
+        { where: { id: req.params.id } },
+      );
+      res.status(200).json({ message: "update succefully", updated });
+    }
+  }),
+  //delete
+  delete: expressAsyncHandler(async (req, res) => {
+    const category = await transactionSchema.findByPk(req.params);
+    if (category && category.user.toString() === req.user.toString) {
+      await category.destroy();
+    }
+    res.status(200).json({ message: "category deleted" });
+  }),
 };
 
 module.exports = Categories;
