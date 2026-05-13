@@ -3,6 +3,7 @@ const db_connection = require("./utils/Database");
 const userRoute = require("./routes/User.route");
 const errorHandle = require("./middleware/ErrorHandling");
 const categoryRoute = require("./routes/Category.route");
+const transactionRoute = require("./routes/transaction.route");
 
 const app = express();
 //db handler
@@ -18,6 +19,7 @@ app.use(express.json());
 //route
 app.use("/", userRoute);
 app.use("/", categoryRoute);
+app.use("/", transactionRoute);
 //errorHandling
 app.use(errorHandle);
 
