@@ -4,7 +4,7 @@ const transactionSchema = require("../models/Transaction.model");
 
 const Transactions = {
   create: expressAsyncHandler(async (req, res) => {
-    const { type, category, date, amount, description } = req.body;
+    const { type, category, date, amount, descriptionk } = req.body;
     if (!type || !amount) {
       throw new Error(
         "Anount,date and type are required to create transactins",
@@ -22,10 +22,22 @@ const Transactions = {
   }),
   //list
   list: expressAsyncHandler(async (req, res) => {
-    const transaction = await transactionSchema.findAll({
-      where: { user: req.user },
-    });
-    res.status(200).json(transaction);
+    const { type, category } = req.query;
+    let filter = { where: { user: req.user }, order: [["date", "DESC"]] };
+    if (type) {
+      filter.where.type = type;
+    }
+    if (category) {
+      if (category == "All") {
+        //No category filtered needed when filter all
+      } else if (category === "uncategorised") {
+        filter.where.category = category;
+      } else {
+        filter.where.category = category;
+      }
+    }
+    const findByFilter = await transactionSchema.findAll(filter);
+    res.json(findByFilter);
   }),
   //update profile
   delete: expressAsyncHandler(async (req, res) => {}),

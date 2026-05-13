@@ -10,7 +10,7 @@ transactionRoute.post(
   Transactions.create,
 );
 transactionRoute.get(
-  "/api/v1/transaction/list",
+  "/api/v1/transaction/filter",
   isAuthenticated,
   Transactions.list,
 );
