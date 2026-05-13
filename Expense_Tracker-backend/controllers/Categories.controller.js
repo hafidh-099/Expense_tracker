@@ -1,7 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const { where } = require("sequelize");
 const categorySchema = require("../models/Categories.model");
-const transactionSchema = require("../models/Transaction.model");
 
 const Categories = {
   create: expressAsyncHandler(async (req, res) => {
@@ -37,24 +36,30 @@ const Categories = {
   }),
   //update
   update: expressAsyncHandler(async (req, res) => {
-    const category = await transactionSchema.findByPk(req.params);
-    console.log(category)
+    const category = await categorySchema.findByPk(req.params.id);
     const { name, type } = req.body;
-    if (category && category.user.toString() === req.user.toString) {
-      const updated = await categorySchema.update(
-        {
-          type,
-          name: name.toLowerCase(),
-        },
-        { where: { id: req.params.id } },
-      );
-      res.status(200).json({ message: "update succefully", updated });
+    const normalizeName = name.toLowerCase();
+    if (!category) {
+      res.status(401);
+      throw new Error("category not found");
     }
+    if (category.user.toString() != req.user.toString()) {
+      res.status(401);
+      throw new Error("user not found");
+    }
+    const updated = await categorySchema.update(
+      {
+        type,
+        name: normalizeName,
+      },
+      { where: { id: req.params.id } },
+    );
+    res.status(200).json({ message: "update succefully", updated });
   }),
   //delete
   delete: expressAsyncHandler(async (req, res) => {
-    const category = await transactionSchema.findByPk(req.params);
-    if (category && category.user.toString() === req.user.toString) {
+    const category = await categorySchema.findByPk(req.params.id);
+    if (category && category.user.toString() === req.user.toString()) {
       await category.destroy();
     }
     res.status(200).json({ message: "category deleted" });
