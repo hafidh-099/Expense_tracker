@@ -7,6 +7,7 @@ import { loginAPI } from "../../services/users/UserSerieces";
 import AlertMessage from "../Alert/AlertMessage";
 import { loginAction } from "../redux/slice/AuthSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 loginAction;
 useDispatch;
 const validationSchema = Yup.object({
@@ -14,6 +15,7 @@ const validationSchema = Yup.object({
   password: Yup.string().required("password is required"),
 });
 const LoginForm = () => {
+  const navigate = useNavigate()
   const dispach = useDispatch();
   const { mutateAsync, isPending, isError, error, isSuccess } = useMutation({
     mutationFn: loginAPI,
@@ -37,6 +39,11 @@ const LoginForm = () => {
         .catch((er) => console.log(er));
     },
   });
+  useEffect(()=>{
+    if(isSuccess){
+      navigate("/profile")
+    }
+  },[isPending, isError, error, isSuccess])
   return (
     <form
       onSubmit={formik.handleSubmit}

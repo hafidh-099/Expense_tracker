@@ -4,7 +4,6 @@ import { BrowserRouter, Routes,Route } from "react-router-dom";
 import PublicNavbar from "./components/Navbar/PublicNavbar";
 import LoginForm from "./components/Users/Login";
 import RegistrationForm from "./components/Users/Register";
-import getUserFromStorage from "./utils/GetToken";
 import PrivateNavbar from "./components/Navbar/PrivateNavbar";
 import { useSelector } from "react-redux";
 useSelector
