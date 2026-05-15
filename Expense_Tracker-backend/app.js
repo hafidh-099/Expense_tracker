@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const db_connection = require("./utils/Database");
 const userRoute = require("./routes/User.route");
 const errorHandle = require("./middleware/ErrorHandling");
@@ -13,7 +14,10 @@ async function db() {
   console.log("connection success");
 }
 db();
-
+const corsOpt={
+origin:["http://localhost:5173"]
+}
+app.use(cors(corsOpt));
 app.use(express.json());
 
 //route
