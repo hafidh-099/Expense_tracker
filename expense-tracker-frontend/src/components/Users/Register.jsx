@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import { registerAPI } from "../../services/users/UserSerieces";
+import { registerAPI } from "../../services/users/UserServices";
 import AlertMessage from "../Alert/AlertMessage";
 import { useNavigate } from "react-router-dom";
 useNavigate;

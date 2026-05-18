@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { loginAPI } from "../../services/users/UserSerieces";
+import { loginAPI } from "../../services/users/UserServices";
 import AlertMessage from "../Alert/AlertMessage";
 import { loginAction } from "../redux/slice/AuthSlice";
 import { useDispatch } from "react-redux";

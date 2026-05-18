@@ -9,25 +9,44 @@ import {
 } from "react-icons/fa";
 import { SiDatabricks } from "react-icons/si";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  addCategoryAPI,
+  updateCategoryAPI,
+} from "../../services/category/categoryServices";
+import AlertMessage from "../Alert/AlertMessage";
 
 const validationSchema = Yup.object({
-  name: Yup.string()
-    .required("Category name is required")
-    .oneOf(["income", "expense"]),
-  type: Yup.string()
-    .required("Category type is required")
-    .oneOf(["income", "expense"]),
+  name: Yup.string(),
+  type: Yup.string().oneOf(["income", "expense"]),
 });
 
-const AddCategory = () => {
+const UpdateCategory = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { mutateAsync, isError, isSuccess, error } = useMutation({
+    mutationFn: updateCategoryAPI,
+    mutationKey: ["update-category"],
+  });
   const formik = useFormik({
     initialValues: {
       type: "",
       name: "",
     },
-    onSubmit: (values) => {},
+    validationSchema,
+    onSubmit: (values) => {
+      const data = {
+        ...values,id
+      }
+      mutateAsync(data)
+        .then(navigate('/categories'))
+        .catch((error) => console.log(error));
+    },
   });
+
+  // useEffect(() => {
+  //   navigate("/categories");
+  // }, [mutateAsync, isError, isSuccess, error]);
 
   return (
     <form
@@ -53,7 +72,7 @@ const AddCategory = () => {
       {isSuccess && (
         <AlertMessage
           type="success"
-          message="Category added successfully, redirecting..."
+          message="Category updated successfully, redirecting..."
         />
       )}
       {/* Category Type */}
@@ -102,10 +121,10 @@ const AddCategory = () => {
         type="submit"
         className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 transform"
       >
-        Add Category
+        update Category
       </button>
     </form>
   );
 };
 
-export default AddCategory;
+export default UpdateCategory;
