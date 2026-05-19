@@ -1,6 +1,6 @@
 import HeroSection from "./components/Home/HomePage";
 
-import { BrowserRouter, Routes,Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PublicNavbar from "./components/Navbar/PublicNavbar";
 import LoginForm from "./components/Users/Login";
 import RegistrationForm from "./components/Users/Register";
@@ -9,25 +9,25 @@ import { useSelector } from "react-redux";
 import AddCategory from "./components/Category/AddCategory";
 import CategoriesList from "./components/Category/CategoriesList";
 import UpdateCategory from "./components/Category/UpdateCategory";
+import TransactionForm from "./components/Transactions/TransactionForm";
 
-
-const App=()=>{
+const App = () => {
   // selector use to get select and get value from slice
-  const userInfo = useSelector((state=>state?.auth?.user))
+  const userInfo = useSelector((state) => state?.auth?.user);
   return (
-
     <BrowserRouter>
-    {/* we put navbar here bcs we want to be available everywhare */}
-    {userInfo?<PrivateNavbar/>:<PublicNavbar/>}
-    <Routes>
-      <Route path="/" element={<HeroSection/>}/>
-      <Route path="/login" element={<LoginForm/>}/>
-      <Route path="/register" element={<RegistrationForm/>}/>
-      <Route path="/add-category" element={<AddCategory/>}/>
-      <Route path="/categories" element={<CategoriesList/>}/>
-       <Route path="/update-category/:id" element={<UpdateCategory/>}/>
-    </Routes>
+      {/* we put navbar here bcs we want to be available everywhare */}
+      {userInfo ? <PrivateNavbar /> : <PublicNavbar />}
+      <Routes>
+        <Route path="/" element={<HeroSection />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegistrationForm />} />
+        <Route path="/add-category" element={<AddCategory />} />
+        <Route path="/categories" element={<CategoriesList />} />
+        <Route path="/update-category/:id" element={<UpdateCategory />} />
+        <Route path="/add-transaction" element={<TransactionForm />} />
+      </Routes>
     </BrowserRouter>
-  )
-}
-export default App
+  );
+};
+export default App;

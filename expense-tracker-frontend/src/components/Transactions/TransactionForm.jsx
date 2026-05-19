@@ -7,6 +7,8 @@ import {
   FaRegCommentDots,
   FaWallet,
 } from "react-icons/fa";
+import { useMutation } from "@tanstack/react-query";
+import { addTransactionAPI } from "../../services/transaction/transactionServices";
 
 const validationSchema = Yup.object({
   type: Yup.string()
@@ -21,6 +23,25 @@ const validationSchema = Yup.object({
 });
 
 const TransactionForm = () => {
+  const { mutateAsync, isError, isSuccess, error } = useMutation({
+    mutationFn: addTransactionAPI,
+    mutationKey: ["category"],
+  });
+  const formik = useFormik({
+    initialValues: {
+      amount:"",
+      type:"",
+      description:"",
+      date:"",
+      category:""
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      mutateAsync(values)
+        .then((data) => console.log(data))
+        .catch((error) => console.log(error));
+    },
+  });
   return (
     <form
       onSubmit={formik.handleSubmit}
