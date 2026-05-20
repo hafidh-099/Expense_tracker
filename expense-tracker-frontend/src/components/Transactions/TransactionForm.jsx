@@ -10,6 +10,8 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addTransactionAPI } from "../../services/transaction/transactionServices";
 import { listCategoryAPI } from "../../services/category/categoryServices";
+import { useNavigate } from "react-router-dom";
+import AlertMessage from "../Alert/AlertMessage";
 
 
 const validationSchema = Yup.object({
@@ -25,12 +27,13 @@ const validationSchema = Yup.object({
 });
 
 const TransactionForm = () => {
-  const {data,isError,isFetched,isLoading,error,refetch} = useQuery({
+  const navigate = useNavigate()
+  const {data} = useQuery({
     queryFn:listCategoryAPI,
     queryKey:['list-category']
   })
  
-  const { mutateAsync } = useMutation({
+  const { mutateAsync,isError,error,isSuccess } = useMutation({
     mutationFn: addTransactionAPI,
     mutationKey: ["category"],
   });
@@ -45,7 +48,7 @@ const TransactionForm = () => {
     validationSchema,
     onSubmit: (values) => {
       mutateAsync(values)
-        .then((data) => console.log(data))
+        .then(navigate("/dashboard"))
         .catch((error) => console.log(error));
     },
   });
@@ -61,6 +64,21 @@ const TransactionForm = () => {
         <p className="text-gray-600">Fill in the details below.</p>
       </div>
       {/* Display alert message */}
+       {isError && (
+        <AlertMessage
+          type="error"
+          message={
+            error?.response?.data?.message ||
+            "Something happened please try again later"
+          }
+        />
+      )}
+      {isSuccess && (
+        <AlertMessage
+          type="success"
+          message="transaction added successfully, redirecting..."
+        />
+      )}
 
       {/* Transaction Type Field */}
       <div className="space-y-2">
