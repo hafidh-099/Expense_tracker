@@ -29,7 +29,7 @@ const TransactionForm = () => {
     queryFn:listCategoryAPI,
     queryKey:['list-category']
   })
-  console.log("***********",data)
+ 
   const { mutateAsync } = useMutation({
     mutationFn: addTransactionAPI,
     mutationKey: ["category"],
