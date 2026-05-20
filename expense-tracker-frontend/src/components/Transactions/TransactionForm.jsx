@@ -7,8 +7,10 @@ import {
   FaRegCommentDots,
   FaWallet,
 } from "react-icons/fa";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { addTransactionAPI } from "../../services/transaction/transactionServices";
+import { listCategoryAPI } from "../../services/category/categoryServices";
+
 
 const validationSchema = Yup.object({
   type: Yup.string()
@@ -23,7 +25,12 @@ const validationSchema = Yup.object({
 });
 
 const TransactionForm = () => {
-  const { mutateAsync, isError, isSuccess, error } = useMutation({
+  const {data,isError,isFetched,isLoading,error,refetch} = useQuery({
+    queryFn:listCategoryAPI,
+    queryKey:['list-category']
+  })
+  console.log("***********",data)
+  const { mutateAsync } = useMutation({
     mutationFn: addTransactionAPI,
     mutationKey: ["category"],
   });
@@ -108,6 +115,11 @@ const TransactionForm = () => {
           className="w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
         >
           <option value="">Select a category</option>
+          {data?.map((element)=>(
+            <option key={element?.id} value={element?.name}>
+              {element?.name}
+            </option>
+          ))}
         </select>
         {formik.touched.category && formik.errors.category && (
           <p className="text-red-500 text-xs italic">
