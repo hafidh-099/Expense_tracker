@@ -11,6 +11,7 @@ import CategoriesList from "./components/Category/CategoriesList";
 import UpdateCategory from "./components/Category/UpdateCategory";
 import TransactionForm from "./components/Transactions/TransactionForm";
 import Dashboard from "./components/Users/Dashboard";
+import UserProfile from "./components/Users/UserProfile";
 
 const App = () => {
   // selector use to get select and get value from slice
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/update-category/:id" element={<UpdateCategory />} />
         <Route path="/add-transaction" element={<TransactionForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </BrowserRouter>
   );
