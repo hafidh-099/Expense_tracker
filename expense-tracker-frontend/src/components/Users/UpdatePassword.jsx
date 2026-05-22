@@ -4,12 +4,22 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { updatePassProfileAPI } from "../../services/profile/ProfileServices";
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../redux/slice/AuthSlice";
+import { useNavigate } from "react-router-dom";
 const validationSchema = Yup.object({
   password: Yup.string()
     .min(5, "Password must be at least 5 characters long")
     .required("Email is required"),
 });
 const UpdatePassword = () => {
+  const navigate = useNavigate();
+  const dispach = useDispatch();
+  const logoutHandler = () => {
+    dispach(logoutAction());
+    //remove user from localstorga
+    localStorage.removeItem("user");
+  };
   const { mutateAsync } = useMutation({
     mutationFn: updatePassProfileAPI,
     mutationKey: ["update-password"],
@@ -23,7 +33,10 @@ const UpdatePassword = () => {
     //Submit
     onSubmit: (values) => {
       mutateAsync(values)
-        .then()
+        .then(() => {
+          logoutHandler();
+          navigate("/login");
+        })
         .catch((error) => console.log(error));
     },
   });
